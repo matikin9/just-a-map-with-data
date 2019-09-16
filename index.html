@@ -51,11 +51,14 @@
     }
 
     function displayOnPage(location, warningString) {
+      /*********** temporarily store the data for each object from your JSON file ***********/
       const lat = location["Latitude"];
       const lng = location["Longitude"];
       const locationName = location["Location"];
       const address = location["Address"];
 
+      /*********** Build a div that will pop up when you select a marker ***********/
+      /*********** Fill it with the data your user will want to see ***********/
       const $locationInfo = $("<div>", { class: "location-data"  });
       $locationInfo.append(`<h1>${locationName}</h1>`);
       $locationInfo.append(`<h3>${address}</h3>`);
@@ -70,7 +73,6 @@
       const popup = e.target.getPopup();
       const content = popup.getContent();
     }
-        
     </script>
 </body>
 
