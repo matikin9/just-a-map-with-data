@@ -59,10 +59,10 @@
 
     function displayOnPage(location, warningString) {
       let name = "";
-      if (location.LocationName === "") {
+      if (location.Location === "") {
         name = "anonymous";
       } else {
-        name = location.LocationName;
+        name = location.Location;
       }
 
       const name_slug = name.replace(/\s+/g, "");
@@ -74,12 +74,12 @@
        */
       const lat = location["Latitude"];
       const lng = location["Longitude"];
-      const locationName = location["LocationName"];
+      const locationName = location["Location"];
       const address = location["Address"];
 
       if (lat == "" || lng == "") {
         warningString += `${name} has no coordinates for Location ${
-          location["LocationName"]
+          locationName
         }.<br>`;
       } else {
         const $locationInfo = $("<div>", {
