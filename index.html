@@ -44,8 +44,8 @@
     function getJSONData() {
       /*********** plug in the path to your JSON data file ***********/
       $.getJSON("sample-data.json", function(data) {
-        $.each(data, function(i, val) {
-          displayOnPage(val);
+        data.foreach(function(e) {
+          displayOnPage(e);
         });
       });
     }
