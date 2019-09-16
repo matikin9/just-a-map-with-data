@@ -37,11 +37,9 @@
       -Insert style Layer
      */
 
-    // L.mapbox.accessToken =
-    //   "pk.eyJ1IjoidGFiYXRhaGciLCJhIjoiY2swZ3d0ZW1tMGNhZDNtbnhuMjl1dWdtaSJ9.QE_hNeGWFEqBI1JFHIR4hQ";
+    L.mapbox.accessToken = 'pk.eyJ1IjoibWF0aWtpbjkiLCJhIjoiYjMyMjBjZTE4NWUxMDkxOWZjZjFjZWEzZTcxNDUxOTkifQ._ldFl3e17jCs7aWm6zMZ3Q';
     const myMap = L.map("map").setView([34.0522, -118.2437], 9);
-    L.mapbox
-    //  .styleLayer("mapbox://styles/tabatahg/ck0gwuq7217531cnymp56kn0u")
+    L.mapbox.styleLayer('mapbox://styles/matikin9/cim5bt1q100iy9jkpl7ff9d1h')
       .addTo(myMap); // base layer
 
     function getJSONData() {
