@@ -27,7 +27,91 @@
 
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     <script src='https://api.mapbox.com/mapbox.js/v3.2.0/mapbox.js'></script>
-    <script src="js/scripts.js"></script>
+    <script>
+    const overlayMaps = {};
+
+    /*
+     * Initialize Map
+      Instructions:
+      -Insert Access token
+      -Insert style Layer
+     */
+
+    // L.mapbox.accessToken =
+    //   "pk.eyJ1IjoidGFiYXRhaGciLCJhIjoiY2swZ3d0ZW1tMGNhZDNtbnhuMjl1dWdtaSJ9.QE_hNeGWFEqBI1JFHIR4hQ";
+    const myMap = L.map("map").setView([34.0522, -118.2437], 9);
+    L.mapbox
+    //  .styleLayer("mapbox://styles/tabatahg/ck0gwuq7217531cnymp56kn0u")
+      .addTo(myMap); // base layer
+
+    function getJSONData() {
+      $.getJSON("sample-data.json", function(data) {
+        $.each(data, function(i, val) {
+          displayOnPage(val);
+        });
+      });
+    }
+
+    /*
+     * Pull data and display on page
+     */
+    $(function() {
+      getJSONData();
+      L.control.layers(overlayMaps).addTo(myMap);
+    });
+
+    function displayOnPage(location, warningString) {
+      let name = "";
+      if (location.LocationName === "") {
+        name = "anonymous";
+      } else {
+        name = location.LocationName;
+      }
+
+      const name_slug = name.replace(/\s+/g, "");
+      const markers = [];
+
+      /*
+       * Add marker for each location
+       * provided by participant.
+       */
+      const lat = location["Latitude"];
+      const lng = location["Longitude"];
+      const locationName = location["LocationName"];
+      const address = location["Address"];
+
+      if (lat == "" || lng == "") {
+        warningString += `${name} has no coordinates for Location ${
+          location["LocationName"]
+        }.<br>`;
+      } else {
+        const $locationInfo = $("<div>", {
+          // "id": name_slug + i,
+          class: "location-data " // + name_slug + "-marker"
+        });
+
+        // Build popup window
+        $locationInfo.append(`<h1>${locationName}</h1>`);
+        $locationInfo.append(`<h3>${address}</h3>`);
+
+        const marker = L.marker([lat, lng])
+          .on("click", onMarkerClick)
+          .bindPopup($locationInfo[0])
+          .addTo(myMap);
+
+        markers.push(marker);
+      }
+
+      overlayMaps[name_slug] = L.layerGroup(markers);
+    }
+
+    function onMarkerClick(e) {
+      const popup = e.target.getPopup();
+      const content = popup.getContent();
+      // $("#location-detail").html(content.innerHTML);
+      // event.target.closePopup();
+    }
+    </script>
 </body>
 
 </html>
