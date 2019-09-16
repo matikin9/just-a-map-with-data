@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
 
-    <!-- Change the title -->
+    <!---------- Change the title ---------->
     <title>This is the title!</title>
     
     <link href='https://api.mapbox.com/mapbox.js/v3.2.0/mapbox.css' rel='stylesheet' />
@@ -29,21 +29,20 @@
 
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     <script src='https://api.mapbox.com/mapbox.js/v3.2.0/mapbox.js'></script>
+    
     <script>
-    const overlayMaps = {};
-
-    /*
-     * Initialize Map
-      Instructions:
-      -Insert Access token
-      -Insert style Layer
-     */
-
+    /*********** Use your own Mapbox Studio map style (and access token) as the base layer ***********/
+    /*********** Customize your initial location coordinates and zoom level ***********/
     L.mapbox.accessToken = 'pk.eyJ1IjoibWF0aWtpbjkiLCJhIjoiYjMyMjBjZTE4NWUxMDkxOWZjZjFjZWEzZTcxNDUxOTkifQ._ldFl3e17jCs7aWm6zMZ3Q';
-    const myMap = L.map("map").setView([34.0522, -118.2437], 9);
+    const myMap = L.map("map").setView([34.0522, -118.2437], 9); 
     L.mapbox.styleLayer('mapbox://styles/matikin9/cim5bt1q100iy9jkpl7ff9d1h').addTo(myMap); // base layer
-
+    
+    $(function() {
+      getJSONData();
+    });
+        
     function getJSONData() {
+      /*********** plug in the path to your JSON data file ***********/
       $.getJSON("sample-data.json", function(data) {
         $.each(data, function(i, val) {
           displayOnPage(val);
@@ -51,65 +50,27 @@
       });
     }
 
-    /*
-     * Pull data and display on page
-     */
-    $(function() {
-      getJSONData();
-      L.control.layers(overlayMaps).addTo(myMap);
-    });
-
     function displayOnPage(location, warningString) {
-      let name = "";
-      if (location.Location === "") {
-        name = "anonymous";
-      } else {
-        name = location.Location;
-      }
-
-      const name_slug = name.replace(/\s+/g, "");
-      const markers = [];
-
-      /*
-       * Add marker for each location
-       * provided by participant.
-       */
       const lat = location["Latitude"];
       const lng = location["Longitude"];
       const locationName = location["Location"];
       const address = location["Address"];
 
-      if (lat == "" || lng == "") {
-        warningString += `${name} has no coordinates for Location ${
-          locationName
-        }.<br>`;
-      } else {
-        const $locationInfo = $("<div>", {
-          // "id": name_slug + i,
-          class: "location-data " // + name_slug + "-marker"
-        });
+      const $locationInfo = $("<div>", { class: "location-data"  });
+      $locationInfo.append(`<h1>${locationName}</h1>`);
+      $locationInfo.append(`<h3>${address}</h3>`);
 
-        // Build popup window
-        $locationInfo.append(`<h1>${locationName}</h1>`);
-        $locationInfo.append(`<h3>${address}</h3>`);
-
-        const marker = L.marker([lat, lng])
-          .on("click", onMarkerClick)
-          .bindPopup($locationInfo[0])
-          .addTo(myMap);
-
-        markers.push(marker);
-      }
-
-      overlayMaps[name_slug] = L.layerGroup(markers);
+      const marker = L.marker([lat, lng])
+        .on("click", onMarkerClick)
+        .bindPopup($locationInfo[0])
+        .addTo(myMap);
     }
 
     function onMarkerClick(e) {
       const popup = e.target.getPopup();
       const content = popup.getContent();
-      // $("#location-detail").html(content.innerHTML);
-      // event.target.closePopup();
     }
+        
     </script>
 </body>
 
